@@ -4,9 +4,11 @@ const FileStorage = require('../service')
 const { resolve } = require('path')
 
 describe('FileStorage', () => {
+  const STORAGE_PATH = resolve(process.env.HOME, '.mpn/storage.json')
+  const createStorage = () => new FileStorage(STORAGE_PATH)
+
   beforeEach(() => {
     mockFS.mock()
-    this.storage = new FileStorage(resolve(__dirname, '../../../../localStorage.json'))
   })
 
   afterEach(() => {
@@ -15,26 +17,32 @@ describe('FileStorage', () => {
   })
 
   it('should create storage file if it doesnt exist', () => {
-    jest.spyOn(fs, 'existsSync').mockImplementation(() => false)
-    fs.unlinkSync(this.storage.path)
-    expect(this.storage.getStorage()).toEqual({})
+    const fsStub = jest.spyOn(fs, 'existsSync').mockImplementation(() => false)
+    fs.unlinkSync(STORAGE_PATH)
+    createStorage()
+    fsStub.mockRestore()
+    expect(fs.existsSync(STORAGE_PATH)).toEqual(true)
   })
 
   it('should return empty object if storage file is empty', () => {
-    fs.writeFileSync(this.storage.path, '')
-    expect(this.storage.getStorage()).toEqual({})
+    const storage = createStorage()
+    fs.writeFileSync(storage.path, '')
+    expect(storage.getStorage()).toEqual({})
   })
 
   it('#get - should return undefined if property doesnt exist', () => {
-    expect(this.storage.get('test')).toEqual(undefined)
+    const storage = createStorage()
+    expect(storage.get('test')).toEqual(undefined)
   })
 
   it('#get - should return property', () => {
-    expect(this.storage.get('config.resolve')).toEqual('/projects')
+    const storage = createStorage()
+    expect(storage.get('config.resolve')).toEqual('/projects')
   })
 
   it('#get - should return all storage if path not passed', () => {
-    expect(this.storage.get()).toEqual({
+    const storage = createStorage()
+    expect(storage.get()).toEqual({
       'config': {
         'resolve': '/projects'
       }
@@ -42,22 +50,29 @@ describe('FileStorage', () => {
   })
 
   it('#set - should set existing property', () => {
-    this.storage.set('config.resolve', '/some')
-    expect(this.storage.get('config.resolve')).toEqual('/some')
+    const storage = createStorage()
+    storage.set('config.resolve', '/some')
+    expect(storage.get('config.resolve')).toEqual('/some')
+    expect(storage.storage.config.resolve).toEqual('/some')
+    const storageJson = JSON.parse(fs.readFileSync(storage.path).toString())
+    expect(storageJson.config.resolve).toEqual('/some')
   })
 
   it('#set - should set not existing property', () => {
-    this.storage.set('some.some', 'some')
-    expect(this.storage.get('some.some')).toEqual('some')
+    const storage = createStorage()
+    storage.set('some.some', 'some')
+    expect(storage.get('some.some')).toEqual('some')
   })
 
   it('#ns - should set prefix to #get functionality', () => {
-    const config = this.storage.ns('config')
+    const storage = createStorage()
+    const config = storage.ns('config')
     expect(config.get()).toEqual({ resolve: '/projects' })
   })
 
   it('#ns - should set prefix to #set functionality', () => {
-    const config = this.storage.ns('config')
+    const storage = createStorage()
+    const config = storage.ns('config')
     config.set('resolve', 'some')
     expect(config.get()).toEqual({ resolve: 'some' })
   })

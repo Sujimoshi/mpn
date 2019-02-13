@@ -27,6 +27,10 @@ describe('link command', () => {
     expect(this.mock.log.info.mock.calls[1]).toEqual([ 'project-two' ])
   })
 
+  it('completion works correctly', () => {
+    expect(linkCommand.completion()).toEqual(['project-main', 'project-one', 'project-two'])
+  })
+
   it('test args', () => {
     expect(linkCommand.test('project', [ 'project' ])).toEqual(true)
     expect(linkCommand.test('-l', [ '-l' ])).toEqual(true)

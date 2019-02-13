@@ -6,14 +6,17 @@ const fs = require('fs')
 class FileStorage {
   constructor (path) {
     this.path = path
-  }
-
-  getStorage () {
     if (!fs.existsSync(this.path)) {
       fs.writeFileSync(this.path, '{}')
     }
-    const string = fs.readFileSync(this.path).toString()
-    return string === '' ? {} : JSON.parse(string)
+  }
+
+  getStorage () {
+    if (!this.storage) {
+      const string = fs.readFileSync(this.path).toString()
+      this.storage = string === '' ? {} : JSON.parse(string)
+    }
+    return this.storage
   }
 
   ns (ns) {

@@ -20,6 +20,10 @@ describe('pack command', () => {
     })
   })
 
+  it('completion works correctly', () => {
+    expect(packCommand.completion()).toEqual(['project-main', 'project-one', 'project-two'])
+  })
+
   it('test args', () => {
     expect(packCommand.test('project', [ 'project' ])).toEqual(true)
     expect(packCommand.test('project -l', [ 'project', '-l' ])).toEqual(false)

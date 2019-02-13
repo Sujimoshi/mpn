@@ -1,6 +1,7 @@
 const { resolvePackage, getPackageMainFile } = require('../../helpers/utils')
 const log = require('../../services/logger')
 const semver = require('semver')
+const utils = require('../../helpers/utils')
 
 const showDepsDiff = (pathToPackageA, pathToPackageB) => {
   const packA = getPackageMainFile(pathToPackageA)
@@ -27,6 +28,13 @@ module.exports = {
   help: `
     mpn deps-diff path_to_package [path_to_package - default to 'CWD'] - Get dependencies difference between given packages.
   `,
+  completion: () => {
+    const resolveCompletions = utils.getResolveCompletions()
+    return resolveCompletions.reduce((temp, el) => {
+      temp[el] = resolveCompletions
+      return temp
+    }, {})
+  },
   test: (argsStr) => /^(\S+?)( \S+)?$/.test(argsStr),
   run: ([packA, packB], CWD) => {
     showDepsDiff(resolvePackage(packA), resolvePackage(packB || CWD))

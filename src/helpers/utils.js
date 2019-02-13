@@ -12,6 +12,23 @@ const STRINGS = {
   ownValueText: 'Your own value: '
 }
 
+exports.getResolveCompletions = () => {
+  let resolveDirsStr = storage.get('config.resolve') || ''
+  return resolveDirsStr.split(':').reduce((temp, dir) => {
+    try {
+      temp.push(...fs.readdirSync(dir).filter(el => el[0] !== '.'))
+    } catch (e) {}
+    return temp
+  }, [])
+}
+
+exports.generateCompletionTree = (scripts) => {
+  return scripts.reduce((temp, el) => {
+    temp[el.name] = el.completion ? el.completion() : null
+    return temp
+  }, {})
+}
+
 exports.resolvePackage = (packageNameOrPath) => {
   if (packageNameOrPath.includes('/')) {
     const result = resolve(process.cwd(), packageNameOrPath)

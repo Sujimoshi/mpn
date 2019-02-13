@@ -17,17 +17,26 @@ describe('config command', () => {
   })
 
   it('run set command', () => {
-    configCommand.run([ 'set', 'resolve=some' ], '')
-    expect(this.mock.log.info).toHaveBeenCalledWith('some')
+    configCommand.run([ 'set', 'resolve=' + '/projects' ], '', [ configCommand ])
+    expect(this.mock.log.info).toHaveBeenCalledWith('/projects')
     expect(storage.getStorage()).toEqual({
+      'completion': {
+        'tree': {
+          'config': [ 'get', 'set' ]
+        }
+      },
       'config': {
-        'resolve': 'some'
+        'resolve': '/projects'
       }
     })
   })
 
   it('run failing command', () => {
     expect(() => configCommand.run([ 'some' ], '')).toThrowError()
+  })
+
+  it('completion works correctly', () => {
+    expect(configCommand.completion()).toEqual([ 'get', 'set' ])
   })
 
   it('test args', () => {

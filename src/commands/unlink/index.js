@@ -32,6 +32,9 @@ module.exports = {
       --all - unlink all
   `,
   test: (argsStr) => /^((\S+)|(--all))$/.test(argsStr),
+  completion: () => {
+    return [ ...utils.getResolveCompletions(), '--all' ]
+  },
   run: ([packageName], CWD) => {
     return unlink(packageName, CWD)
   }

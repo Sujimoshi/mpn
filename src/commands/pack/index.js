@@ -21,6 +21,9 @@ module.exports = {
   help: `
     mpn pack [package_name_or_path] - Pack and install package as file
   `,
+  completion: () => {
+    return utils.getResolveCompletions()
+  },
   test: (argsStr) => /^(\S+)$/.test(argsStr),
   run: ([ packageNameOrPath ], CWD) => {
     return pack(packageNameOrPath, CWD)

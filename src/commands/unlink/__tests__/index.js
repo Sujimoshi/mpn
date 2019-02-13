@@ -28,6 +28,10 @@ describe('unlink command', () => {
     })
   })
 
+  it('completion works correctly', () => {
+    expect(unlinkCommand.completion()).toEqual(['project-main', 'project-one', 'project-two', '--all'])
+  })
+
   it('test args', () => {
     expect(unlinkCommand.test('project', [ 'project' ])).toEqual(true)
     expect(unlinkCommand.test('--all', [ '--all' ])).toEqual(true)

@@ -28,7 +28,7 @@ describe('cli core', () => {
 
   it('run script', () => {
     cli(CWD, ['node', 'mpn', 'fake', 'arg'], [ fakeScript ])
-    expect(fakeScript.run).toHaveBeenCalledWith(['arg'], CWD)
+    expect(fakeScript.run).toHaveBeenCalledWith(['arg'], CWD, [ fakeScript, helpScript.factory() ])
   })
 
   it('show help and error message if script not found', () => {

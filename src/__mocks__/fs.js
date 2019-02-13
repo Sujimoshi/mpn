@@ -1,4 +1,5 @@
 const fsMock = require('mock-fs')
+const { resolve } = require('path')
 
 let logsTemp = []
 let errorsTemp = []
@@ -24,11 +25,15 @@ exports.mock = () => {
       warn: warnMock
     },
     fs: fsMock({
-      './localStorage.json': JSON.stringify({
-        config: {
-          resolve: '/projects'
-        }
-      }),
+      [resolve(process.env.HOME, '.mpn/')]: {
+        'storage.json': JSON.stringify({
+          config: {
+            resolve: '/projects'
+          }
+        }),
+        'completion.sh': ''
+      },
+      [resolve(process.env.HOME, '.bash_profile')]: '',
       './package.json': '{}',
       '/projects': {
         'project-one': {

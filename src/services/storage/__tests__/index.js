@@ -14,6 +14,6 @@ describe('storage container', () => {
 
   it('should return storage object', () => {
     expect(storage).toBeInstanceOf(FileStorage)
-    expect(storage.path).toEqual(resolve(__dirname, '../../../../localStorage.json'))
+    expect(storage.path).toEqual(resolve(process.env.HOME, '.mpn/storage.json'))
   })
 })

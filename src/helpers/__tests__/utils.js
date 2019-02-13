@@ -10,6 +10,30 @@ const request = require('sync-request')
 const storage = require('../../services/storage')
 
 describe('utils', () => {
+  describe('#getResolveCompletions', () => {
+    beforeEach(() => {
+      mockFS.mock()
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+      mockFS.restore()
+    })
+
+    it('Should return Array of all resolvable folders', () => {
+      expect(utils.getResolveCompletions()).toEqual(['project-main', 'project-one', 'project-two'])
+    })
+  })
+
+  describe('#generateCompletionTree', () => {
+    it('Should generate correct completion tree', () => {
+      expect(utils.generateCompletionTree([{
+        name: 'script',
+        completion: () => ([ 'get', 'set' ])
+      }])).toEqual({ 'script': [ 'get', 'set' ] })
+    })
+  })
+
   describe('#resolvePackage', () => {
     beforeEach(() => {
       mockFS.mock()

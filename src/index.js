@@ -1,3 +1,4 @@
+require('./completion')()
 const { checkUpdates } = require('./helpers/utils')
 const log = require('./services/logger')
 const MPNError = require('./helpers/error')
@@ -15,7 +16,7 @@ module.exports = async (CWD, argv, scripts) => {
       if (script.test && !script.test(args.join(' '), args)) {
         throw MPNError.ARGS_ERROR(script.help)
       }
-      await script.run(args, CWD)
+      await script.run(args, CWD, scripts)
     }
     checkUpdates()
     process.exit(0)

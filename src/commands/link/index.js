@@ -19,6 +19,9 @@ const link = (args, CWD) => {
 
 module.exports = {
   name: 'link',
+  completion: () => {
+    return utils.getResolveCompletions()
+  },
   help: `
     mpn link [package_name_or_path] - Link package to current
       -l - List all linked packages
