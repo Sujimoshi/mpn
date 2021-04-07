@@ -7,8 +7,10 @@ const { dirname } = require('path')
 class FileStorage {
   constructor (path) {
     this.path = path
-    if (!fs.existsSync(this.path)) {
+    if (!fs.existsSync(dirname(this.path))) {
       fs.mkdirSync(dirname(this.path), { recursive: true })
+    }
+    if (!fs.existsSync(this.path)) {
       fs.writeFileSync(this.path, '{}', {})
     }
   }

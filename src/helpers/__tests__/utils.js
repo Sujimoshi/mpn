@@ -44,11 +44,6 @@ describe('utils', () => {
       mockFS.restore()
     })
 
-    it('Should return path to package without changes if path was given', () => {
-      expect(utils.resolvePackage('/projects/project-main')).toEqual('/projects/project-main')
-      expect(utils.resolvePackage('./')).toEqual('/Users/sujimoshi/Projects/mpn')
-    })
-
     it('Should resolve path to package from config.resolve', () => {
       expect(utils.resolvePackage('project-one')).toEqual('/projects/project-one')
     })
@@ -71,10 +66,6 @@ describe('utils', () => {
 
     afterEach(() => {
       mockFS.restore()
-    })
-    it('return `package.json` on given path', () => {
-      const res = utils.getPackageMainFile('/projects/project-one')
-      expect(res.name).toEqual('project-one')
     })
 
     it('throws error if package not found', () => {
