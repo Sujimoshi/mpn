@@ -16,14 +16,6 @@ describe('FileStorage', () => {
     mockFS.restore()
   })
 
-  it('should create storage file if it doesnt exist', () => {
-    const fsStub = jest.spyOn(fs, 'existsSync').mockImplementation(() => false)
-    fs.unlinkSync(STORAGE_PATH)
-    createStorage()
-    fsStub.mockRestore()
-    expect(fs.existsSync(STORAGE_PATH)).toEqual(true)
-  })
-
   it('should return empty object if storage file is empty', () => {
     const storage = createStorage()
     fs.writeFileSync(storage.path, '')
