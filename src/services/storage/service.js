@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { dirname } = require('path')
 
 /**
  * FileStorage - Gives ability to create local storage using file system
@@ -7,7 +8,8 @@ class FileStorage {
   constructor (path) {
     this.path = path
     if (!fs.existsSync(this.path)) {
-      fs.writeFileSync(this.path, '{}')
+      fs.mkdirSync(dirname(this.path), { recursive: true })
+      fs.writeFileSync(this.path, '{}', {})
     }
   }
 

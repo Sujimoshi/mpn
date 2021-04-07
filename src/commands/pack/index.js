@@ -6,7 +6,7 @@ const pack = (packageNameOrPath, CWD) => {
   const packagePath = utils.resolvePackage(packageNameOrPath)
   const packageName = basename(packagePath)
   const packageMainFile = utils.getPackageMainFile(packagePath)
-  const afterPackName = `${packageMainFile.name}-${packageMainFile.version}.tgz`
+  const afterPackName = `${packageMainFile.name.replace('@', '').replace('/', '-')}-${packageMainFile.version}.tgz`
 
   log.info(`Making 'npm pack ${packagePath}'`)
 
