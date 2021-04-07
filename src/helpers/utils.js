@@ -165,8 +165,7 @@ exports.exec = (command, args, cwd = process.cwd(), allowConsoleClear = true) =>
     const isErrorInString = errorIndex !== -1
     const warningIndex = searchStr.indexOf('WARN')
     const isWarningInString = warningIndex !== -1
-    let log = ((isErrorInString && isWarningInString) && errorIndex < warningIndex) || !isWarningInString
-      ? logger.error : logger.warn
+    let log = isErrorInString ? logger.error : isWarningInString ? logger.warn : logger.info
     const errorStringsArr = err.toString().replace(/ ?npm ?| ?ERR!? | ?WARN /g, '')
       .trim()
       .split('\n')
